@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gioco</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.cdnfonts.com" />
+    <link href="https://fonts.cdnfonts.com/css/cubano" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Pattern animato di sfondo -->
+    <div class="pattern-background"></div>
+
+    <!-- Schermata Intro (stato 1) -->
+    <div class="screen screen--intro" id="screen-intro">
+      <div class="intro__logo">
+        <a href="https://wattabout.ch/" target="_blank" rel="noopener noreferrer">
+          <img src="assets/logo_k5.svg" alt="Watt About Logo" />
+        </a>
+      </div>
+
+      <div class="intro__content">
+        <div class="intro__buttons-container">
+          <div class="intro__button">
+            <div class="intro__button-back">
+              <button class="intro__button-front">
+                <img src="assets/lightning.svg" alt="lightning" />
+              </button>
+            </div>
+          </div>
+
+          <div class="intro__vs">VS</div>
+
+          <div class="intro__button">
+            <div class="intro__button-back">
+              <button class="intro__button-front">
+                <img src="assets/plug.svg" alt="plug" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <p class="intro__text">
+          Consumo contro<br />
+          produzione.<br />
+          chi vincerà?
+        </p>
+      </div>
+
+      <button class="btn btn--intro" id="btn-intro-next">AVANTI</button>
+      <p class="intro__mobile-only" id="mobile-only-message">
+        Questo gioco si può giocare solo su mobile :(
+      </p>
+    </div>
+
+    <!-- Schermata Tutorial (stato 2) -->
+    <div class="screen screen--tutorial" id="screen-tutorial" style="display: none">
+      <div class="tutorial__content">
+        <!-- Blocco 1: Plug -->
+        <div class="tutorial__block">
+          <div class="tutorial__button">
+            <div class="intro__button-back">
+              <button class="intro__button-front">
+                <img src="assets/plug.svg" alt="plug" />
+              </button>
+            </div>
+          </div>
+          <p class="tutorial__text">Causa un black out facendo sovraccaricare la rete o consumando troppa energia</p>
+        </div>
+
+        <!-- Blocco 2: Lightning -->
+        <div class="tutorial__block">
+          <div class="tutorial__button">
+            <div class="intro__button-back">
+              <button class="intro__button-front">
+                <img src="assets/lightning.svg" alt="lightning" />
+              </button>
+            </div>
+          </div>
+          <p class="tutorial__text">Mantieni la tensione dell'energia nell'area verde fino allo scadere del tempo</p>
+        </div>
+      </div>
+
+      <button class="btn btn--tutorial" id="btn-tutorial-play">GIOCA</button>
+    </div>
+
+    <!-- Countdown overlay -->
+    <div class="countdown-overlay" id="countdown-overlay" style="display: none">
+      <div class="countdown-text" id="countdown-text">3</div>
+    </div>
+
+    <!-- Game Over overlay - STOP -->
+    <div class="gameover-overlay" id="gameover-overlay" style="display: none">
+      <div class="gameover-text">STOP</div>
+    </div>
+
+    <!-- Schermata Fine Gioco -->
+    <div class="endgame-overlay" id="endgame-overlay" style="display: none">
+      <div class="endgame__content">
+        <h1 class="endgame__title" id="endgame-title">BLACK OUT</h1>
+        
+        <div class="endgame__info">
+          <div class="endgame__winner">
+            <span>vince</span>
+            <img id="endgame-icon" src="assets/plug-small.svg" alt="winner">
+          </div>
+          
+          <p class="endgame__message" id="endgame-message">
+            Troppi energia: la produzione ha superato il consumo e il sistema è crollato!<br><br>
+            Nella rete elettrica produzione e consumo devono reestare sempre in equilibrio
+          </p>
+        </div>
+        
+        <button class="btn btn--endgame" id="btn-endgame-replay">RIGIOCA</button>
+      </div>
+    </div>
+
+    <!-- Schermata Gioco (stato 3) -->
+    <main class="game" id="screen-game" style="display: none">
+      <!-- Container particelle -->
+      <div class="particles-container" id="particles-container"></div>
+
+      <!-- Timer verticale a sinistra -->
+      <div class="game__timer" id="timer-text">15:0</div>
+
+      <!-- Bottone superiore (socket/plug) -->
+      <div class="button__back button__back--top">
+        <button class="button__front" id="btn-socket" aria-label="Socket">
+          <img src="assets/plug.svg" alt="plug" />
+        </button>
+      </div>
+
+      <!-- Area centrale con cerchi e linee -->
+      <div class="game__center">
+        <!-- Linee verticali di connessione -->
+        <div class="game__lines">
+          <div class="line"></div>
+          <div class="line"></div>
+          <div class="line"></div>
+        </div>
+
+        <!-- Cerchi concentrici -->
+        <div class="game__circles">
+          <div class="circle circle--outer"></div>
+          <div class="circle circle--middle"></div>
+          <div class="circle circle--energy" id="energy-indicator"></div>
+        </div>
+      </div>
+
+      <!-- Bottone inferiore (energy/lightning) -->
+      <div class="button__back button__back--bottom">
+        <button class="button__front" id="btn-energy" aria-label="Energy">
+          <img src="assets/lightning.svg" alt="lightning" />
+        </button>
+      </div>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

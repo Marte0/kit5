@@ -1,0 +1,774 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('assets/fonts/Satoshi-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+html {
+  height: 100dvh;
+  overflow: hidden;
+  /* Previene bounce scroll su iOS */
+  position: fixed;
+  width: 100%;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  /* Usa dvh (dynamic viewport height) - si adatta alla barra iOS Safari */
+  height: 100dvh;
+  background-color: #b9da49;
+  font-family: system-ui, sans-serif;
+  overflow: hidden;
+  /* Previene pull-to-refresh su mobile */
+  overscroll-behavior: none;
+  /* Previene selezione testo */
+  user-select: none;
+  -webkit-user-select: none;
+  /* Previene tap highlight su iOS */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Pattern animato di sfondo - loghi ruotati 45° */
+.pattern-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.1;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.pattern-background::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: url('assets/logo_verde_scuro_rotated.svg');
+  background-size: 150px 150px;
+  background-repeat: repeat;
+  animation: movePattern 60s linear infinite;
+}
+
+@keyframes movePattern {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-150px, -150px);
+  }
+}
+
+/* Schermate generiche (intro, tutorial, risultato) */
+.screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 40px 20px;
+  z-index: 10;
+}
+
+/* Schermata Intro */
+.intro__logo {
+  width: 40vw;
+  max-width: 250px;
+  margin-top: 20px;
+}
+
+.intro__logo a {
+  display: block;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.intro__logo a:hover {
+  opacity: 0.8;
+}
+
+.intro__logo img {
+  width: 100%;
+  height: auto;
+}
+
+.intro__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  flex: 1;
+  justify-content: center;
+}
+
+/* Flexbox orizzontale per i bottoni */
+.intro__buttons-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Wrapper singolo bottone */
+.intro__button {
+  width: 130px;
+  height: 130px;
+  flex-shrink: 0;
+}
+
+/* VS */
+.intro__vs {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 48px;
+  color: #006146;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin: 0 20px;
+}
+
+/* Testo */
+.intro__text {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 2rem;
+  color: #006146;
+  text-align: center;
+  line-height: 1.3;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Bottoni animati intro */
+.intro__button-back {
+  width: 130px;
+  height: 130px;
+  background-color: #cdb188;
+  border: 4px solid #006146;
+  border-radius: 50%;
+  position: relative;
+  overflow: visible;
+}
+
+.intro__button-front {
+  width: 100%;
+  height: 100%;
+  background-color: #f8e9d3;
+  border: 4px solid #fffcf7;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  border: none;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: buttonPress 0.6s ease-in-out infinite;
+}
+
+.intro__button-front img {
+  width: 60%;
+  height: 60%;
+  object-fit: contain;
+}
+
+@keyframes buttonPress {
+  0%, 50%, 100% {
+    bottom: 10px;
+  }
+  25% {
+    bottom: 0px;
+  }
+}
+
+.intro__button:nth-child(1) .intro__button-front {
+  animation-delay: 0s;
+}
+
+.intro__button:nth-child(3) .intro__button-front {
+  animation-delay: 0.3s;
+}
+
+/* Bottoni */
+.btn {
+  padding: 16px 60px;
+  font-size: 32px;
+  font-family: 'Cubano', sans-serif;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn--intro {
+  background-color: #006146;
+  color: #fffcf7;
+  margin-bottom: 20px;
+}
+
+.intro__mobile-only {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.5rem;
+  color: #006146;
+  text-align: center;
+  margin: 0 0 20px 0;
+  font-weight: 500;
+  display: none;
+}
+
+/* Se è desktop, nascondi il bottone e mostra il messaggio */
+body.is-desktop .btn--intro {
+  display: none;
+}
+
+body.is-desktop .intro__mobile-only {
+  display: block;
+}
+
+.btn:active {
+  transform: scale(0.95);
+}
+
+/* Schermata Tutorial */
+.tutorial__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  flex: 1;
+  justify-content: center;
+  padding: 20px;
+}
+
+.tutorial__block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.tutorial__button {
+  width: 110px;
+  height: 110px;
+}
+
+.tutorial__button .intro__button-back {
+  width: 110px;
+  height: 110px;
+}
+
+.tutorial__button .intro__button-front {
+  width: 100%;
+  height: 100%;
+}
+
+.tutorial__text {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.25rem;
+  color: #006146;
+  text-align: center;
+  line-height: 1.3;
+  margin: 0;
+  font-weight: 500;
+  max-width: 85vw;
+}
+
+.btn--tutorial {
+  background-color: #006146;
+  color: #fffcf7;
+  margin-bottom: 20px;
+}
+
+/* Schermata Gioco */
+.game {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
+  background-color: #388547;
+  z-index: 10;
+}
+
+/* Timer verticale a sinistra - sopra tutto */
+.game__timer {
+  position: fixed;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: center;
+  font-family: "Cubano", sans-serif;
+  font-size: 52px;
+  font-weight: 400;
+  color: #1d1d1b;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+/* Countdown Overlay */
+.countdown-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 97, 70, 0.7);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition: opacity 0.3s ease-out;
+}
+
+.countdown-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Game Over Overlay */
+.gameover-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 97, 70, 0);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.gameover-overlay.show {
+  animation: fadeInOverlay 0.3s ease-in-out forwards;
+}
+
+.gameover-text {
+  font-family: 'Cubano', sans-serif;
+  font-size: 120px;
+  color: #ffffff;
+  font-weight: 400;
+  text-align: center;
+  transform: scale(1.3);
+}
+
+.gameover-overlay.show .gameover-text {
+  animation: scaleInText 0.3s ease-in-out forwards;
+}
+
+@keyframes fadeInOverlay {
+  0% {
+    opacity: 0;
+    background-color: rgba(0, 97, 70, 0);
+  }
+  100% {
+    opacity: 1;
+    background-color: rgba(0, 97, 70, 0.7);
+  }
+}
+
+@keyframes scaleInText {
+  0% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Endgame Overlay */
+.endgame-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  z-index: 10001;
+  opacity: 0;
+}
+
+.endgame-overlay.show {
+  animation: fadeInEndgame 0.8s ease-out forwards;
+}
+
+/* Colori sfondo a seconda del vincitore */
+.endgame-overlay.consumo {
+  background-color: rgba(0, 97, 70, 0);
+}
+
+.endgame-overlay.consumo.show {
+  background-color: rgba(0, 97, 70, 0.7);
+}
+
+.endgame-overlay.energia {
+  background-color: rgba(141, 110, 0, 0);
+}
+
+.endgame-overlay.energia.show {
+  background-color: rgba(141, 110, 0, 0.7);
+}
+
+.endgame__content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 60px 20px 40px;
+}
+
+.endgame__title {
+  font-family: 'Cubano', sans-serif;
+  font-size: 64px;
+  color: #ffffff;
+  text-align: center;
+  margin: 0;
+  line-height: 1;
+}
+
+.endgame__info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  flex: 1;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.endgame-overlay.show .endgame__info {
+  animation: fadeInContent 0.6s ease-out 0.3s forwards;
+}
+
+.endgame__winner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.5rem;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.endgame__winner img {
+  width: 32px;
+  height: 32px;
+}
+
+.endgame__message {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.25rem;
+  color: #ffffff;
+  text-align: center;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 85vw;
+  font-weight: 500;
+}
+
+.btn--endgame {
+  background-color: #006146;
+  color: #fffcf7;
+}
+
+@keyframes fadeInEndgame {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInContent {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.countdown-text {
+  font-family: "Cubano", sans-serif;
+  font-size: 120px;
+  color: #ffffff;
+  font-weight: 400;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(-30px);
+}
+
+/* Animazioni countdown */
+.countdown-text.animate-number {
+  animation: countdownNumber 900ms ease-out forwards;
+}
+
+.countdown-text.animate-go {
+  animation: countdownGo 900ms ease-out forwards;
+}
+
+@keyframes countdownNumber {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  66.67% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+}
+
+@keyframes countdownGo {
+  0% {
+    opacity: 0;
+    transform: scale(1.2);
+  }
+  66.67% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+/* Area centrale con cerchi */
+.game__center {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Linee verticali di connessione - dal centro bottone top a centro bottone bottom */
+.game__lines {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: calc(30px + 65px);
+  bottom: calc(30px + 65px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  z-index: 50;
+  pointer-events: none;
+}
+
+.line {
+  width: 4px;
+  height: 100%;
+  background-color: #006146;
+}
+
+/* Cerchi concentrici - fissi 500px, possono uscire dai bordi */
+.game__circles {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  z-index: 2;
+}
+
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* z-index 1: Cerchio grande 500px verde chiaro con bordo scuro */
+.circle--outer {
+  width: 500px;
+  height: 500px;
+  background-color: #b9da49;
+  border: 4px solid #006146;
+  z-index: 1;
+}
+
+/* z-index 2: Cerchio piccolo 150px colore sfondo con bordo scuro */
+.circle--middle {
+  width: 150px;
+  height: 150px;
+  background-color: #388547;
+  border: 4px solid #006146;
+  z-index: 2;
+}
+
+/* z-index 3: Cerchio giallo 350px iniziale, opacità 50%, no limiti */
+.circle--energy {
+  width: 350px;
+  height: 350px;
+  background-color: rgba(255, 209, 46, 0.5);
+  transition: transform 0.3s ease-in-out;
+  z-index: 3;
+}
+
+/* Particelle */
+.particles-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 75;
+}
+
+.particle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: #ffd12e;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(255, 209, 46, 1);
+  opacity: 0;
+}
+
+/* Particella che va dal centro al bottone */
+.particle.moving-out {
+  transition: left 0.5s linear, top 0.5s linear;
+  animation: fadeOutToButton 0.5s linear forwards;
+}
+
+/* Particella che va dal bottone al centro */
+.particle.moving-in {
+  transition: left 0.5s linear, top 0.5s linear;
+  animation: fadeInToCenter 0.5s linear forwards;
+}
+
+/* Animazione: dal centro (trasparente) diventa opaca a 1/3 e rimane opaca */
+@keyframes fadeOutToButton {
+  0% {
+    opacity: 0;
+  }
+  33% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Animazione: dal bottone (opaca) rimane opaca fino a 2/3, poi svanisce al centro */
+@keyframes fadeInToCenter {
+  0% {
+    opacity: 1;
+  }
+  66% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Bottoni - z-index 100 (sopra linee e cerchi) */
+.button__back {
+  width: 130px;
+  height: 130px;
+  background-color: #cdb188;
+  border: 4px solid #006146;
+  border-radius: 50%;
+  position: fixed;
+  overflow: visible;
+  z-index: 100;
+  flex-shrink: 0;
+  aspect-ratio: 1;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: box-shadow 0.2s ease-out;
+}
+
+.button__back.glow {
+  box-shadow:
+    0 0 20px rgba(255, 209, 46, 1),
+    0 0 40px rgba(255, 209, 46, 1);
+}
+
+.button__back--top {
+  top: 30px;
+}
+
+.button__back--bottom {
+  bottom: 30px;
+}
+
+.button__front {
+  width: 100%;
+  height: 100%;
+  background-color: #f8e9d3;
+  border: 4px solid #fffcf7;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  cursor: pointer;
+  transition:
+    bottom 0.07s ease-in-out,
+    background-color 0.15s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  outline: none;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  aspect-ratio: 1;
+}
+
+.button__front.is-pressed {
+  bottom: 0;
+  background-color: #ecd9be;
+}
+
+.button__front img {
+  width: 55%;
+  height: auto;
+  max-height: 68%;
+  object-fit: contain;
+}
