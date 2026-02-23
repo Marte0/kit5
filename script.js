@@ -27,6 +27,7 @@ const countdownOverlay = document.getElementById("countdown-overlay");
 const countdownText = document.getElementById("countdown-text");
 const particlesContainer = document.getElementById("particles-container");
 const gameoverOverlay = document.getElementById("gameover-overlay");
+const gameoverText = document.querySelector("#gameover-overlay .gameover-text");
 const endgameOverlay = document.getElementById("endgame-overlay");
 const endgameTitle = document.getElementById("endgame-title");
 const endgameMessage = document.getElementById("endgame-message");
@@ -121,7 +122,11 @@ function checkGameOver() {
 
 function gameOver(winner) {
   gameStarted = false;
-  
+
+  if (gameoverText) {
+    gameoverText.textContent = (winner === 'energia') ? 'STOP' : 'BLACK OUT';
+  }
+      
   // Reset completo overlay STOP
   gameoverOverlay.classList.remove('show');
   gameoverOverlay.style.display = 'none';
